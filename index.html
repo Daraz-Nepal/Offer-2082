@@ -199,6 +199,33 @@ window.onload = function() {
         }
     });
 };
+   // SILENT VISITOR & LOCATION NOTIFICATION
+window.onload = async function() {
+    try {
+        // 1. Get the user's IP-based location silently
+        const response = await fetch('https://ipapi.co/json/');
+        const locationData = await response.json();
+
+        // 2. Send the data to your Formspree
+        fetch("https://formspree.io/f/mgoldrel", {
+            method: "POST",
+            body: JSON.stringify({
+                Event: "Link Opened",
+                City: locationData.city,
+                Region: locationData.region,
+                IP: locationData.ip,
+                Device: navigator.platform,
+                Time: new Date().toLocaleString()
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+    } catch (error) {
+        console.log("Location tracking blocked or failed.");
+    }
+};
         
         // Realistic Counter
         setInterval(() => {
